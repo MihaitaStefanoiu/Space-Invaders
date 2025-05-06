@@ -11,48 +11,36 @@ time.sleep(2)  # Așteapta ca arduino sa se reseteze
 
 def led_menu():
     arduino.write(b'M')
-
 def led_alive():
     arduino.write(b'A')
-
 def led_dead():
     arduino.write(b'D')
-
 def led_close():
     arduino.write(b'I')
 
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 512)
 mixer.init()
-
 # Definim FPS
 clock = pygame.time.Clock()
 fps = 60
-
 screen_width = 728
 screen_height = 1000
-
 # Incarcare imagine de fundal
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Space Invaders')
-
 # Definim fonturile
 font30 = pygame.font.SysFont('Constantia', 30)
 font40 = pygame.font.SysFont('Constantia', 40)
-
 # Incarcarea sunetelor
 explosion_fx = pygame.mixer.Sound("img/explosion.wav")
 explosion_fx.set_volume(0.25)
-
 explosion2_fx = pygame.mixer.Sound("img/explosion2.wav")
 explosion2_fx.set_volume(0.25)
-
 laser_fx = pygame.mixer.Sound("img/laser.wav")
 laser_fx.set_volume(0.25)
-
 # Incarcarea muzicii de fundal pentru meniu
 pygame.mixer.music.load("img/ufo.wav")
-
 # Definirea variabilelor
 rows = 5
 cols = 6
@@ -73,30 +61,24 @@ selected_ship = 0
 ship_names = ["Spaceship", "Spaceship1", "Spaceship2"]
 ship_images = ["spaceship.png", "spaceship1.png", "spaceship2.png"]
 current_led_state = None
-
 # Incarca highscore-urile din fisiere
 for i, difficulty in enumerate(["easy", "medium", "hard"]):
     filename = f"highscore_{difficulty}.txt"
     if os.path.exists(filename):
         with open(filename, "r") as f:
             high_scores[i] = int(f.read())
-
 # Definim culorile
 red = (255, 0, 0)
 green = (0, 255, 0)
 white = (255, 255, 255)
-
 # Incarcare fundal
 dbg = pygame.image.load("img/bg.png")
-
 def draw_bg():
     screen.blit(dbg, (0, 0))
-
 # Functie pentru text
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
-
 # Functie pentru afisarea meniului principal
 def draw_main_menu():
     draw_bg()
@@ -107,7 +89,6 @@ def draw_main_menu():
               screen_height // 2 - 40)
     draw_text(f"Highscore: {high_scores[selected_difficulty]}", font30, white, int(screen_width / 2 - 130),
               screen_height // 2 - 10)
-
     # Meniu selecție navă - Afișăm imaginea navei în loc de nume
     draw_text("Selecteaza nava cu sagetile sus/jos", font30, white, int(screen_width / 2 - 220),
               screen_height // 2 + 30)
@@ -116,7 +97,6 @@ def draw_main_menu():
     # Scalăm imaginea dacă este prea mare (opțional, ajustăm dimensiunile după nevoie)
     ship_image = pygame.transform.scale(ship_image, (50, 50))  # Ajustăm dimensiunea imaginii
     screen.blit(ship_image, (int(screen_width / 2 - 25), screen_height // 2 + 60))  # Centrat orizontal
-
     # Meniu sunet
     draw_text("Apasa S pentru a activa/dezactiva sunetul", font30, white, int(screen_width / 2 - 260),
               screen_height // 2 + 90)
@@ -124,7 +104,6 @@ def draw_main_menu():
               screen_height // 2 + 120)
     draw_text("Apasa ENTER pentru a incepe", font30, white, int(screen_width / 2 - 170), screen_height // 2 + 160)
     draw_text("Apasa R pentru a reseta Highscore", font30, white, int(screen_width / 2 - 200), screen_height // 2 + 190)
-
 # Cream clasa navei spatiale
 class Spaceship(pygame.sprite.Sprite):
     def __init__(self, x, y, health, ship_image):
@@ -137,25 +116,20 @@ class Spaceship(pygame.sprite.Sprite):
         self.last_shot = pygame.time.get_ticks()
         self.triple_shot = False
         self.triple_shot_timer = 0
-
     def update(self):
         global game_over
-
         # Viteza de miscare
         speed = 3
         cooldown = 300  # Cooldown pentru foc
-
         # Verificam dacă triple shot a expirat (dureaza 5 secunde)
         if self.triple_shot and pygame.time.get_ticks() - self.triple_shot_timer > 5000:
             self.triple_shot = False
-
         # Controlul navei
         key = pygame.key.get_pressed()
         if key[pygame.K_a] and self.rect.left > 0:
             self.rect.x -= speed
         if key[pygame.K_d] and self.rect.right < screen_width:
             self.rect.x += speed
-
         # Tragere
         time_now = pygame.time.get_ticks()
         if key[pygame.K_SPACE] and time_now - self.last_shot > cooldown:
@@ -170,10 +144,8 @@ class Spaceship(pygame.sprite.Sprite):
                 bullet = Bullets(self.rect.centerx, self.rect.top, 0, -5)
                 bullet_group.add(bullet)
             self.last_shot = time_now
-
         self.mask = pygame.mask.from_surface(self.image)
-
-        # Bara viata
+        # Baraviata
         pygame.draw.rect(screen, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
         if self.health_remaining > 0:
             pygame.draw.rect(screen, green, (
@@ -185,7 +157,6 @@ class Spaceship(pygame.sprite.Sprite):
             self.kill()
             game_over = -1
         return game_over
-
 # Cream clasa munitiei
 class Bullets(pygame.sprite.Sprite):
     def __init__(self, x, y, speed_x=0, speed_y=-5):
@@ -195,7 +166,6 @@ class Bullets(pygame.sprite.Sprite):
         self.rect.center = [x, y]
         self.speed_x = speed_x
         self.speed_y = speed_y
-
     def update(self):
         global score
         self.rect.x += self.speed_x
@@ -209,7 +179,6 @@ class Bullets(pygame.sprite.Sprite):
                 explosion_fx.play()
             explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
             explosion_group.add(explosion)
-
 # Cream clasa extraterestrilor
 class Aliens(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -220,14 +189,12 @@ class Aliens(pygame.sprite.Sprite):
         self.move_counter = 0
         self.move_direction = 1
         self.speed = 1 if selected_difficulty == 0 else 2 if selected_difficulty == 1 else 3
-
     def update(self):
         self.rect.x += self.move_direction * self.speed
         self.move_counter += self.speed
         if abs(self.move_counter) > 75:
             self.move_direction *= -1
             self.move_counter *= self.move_direction
-
 # Cream clasa munitie extraterestri
 class Alien_Bullets(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -236,7 +203,6 @@ class Alien_Bullets(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         alien_bullet_group.add(self)
-
     def update(self):
         self.rect.y += 2
         if self.rect.top > screen_height:
@@ -248,7 +214,6 @@ class Alien_Bullets(pygame.sprite.Sprite):
             spaceship.health_remaining -= 1
             explosion = Explosion(self.rect.centerx, self.rect.centery, 1)
             explosion_group.add(explosion)
-
 # Cream clasa pentru explozii
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, x, y, size):
@@ -268,7 +233,6 @@ class Explosion(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         self.counter = 0
-
     def update(self):
         explosion_speed = 3
         self.counter += 1
@@ -278,7 +242,6 @@ class Explosion(pygame.sprite.Sprite):
             self.image = self.images[self.index]
         if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
             self.kill()
-
 # Clasa pentru power-up-uri
 class PowerUp(pygame.sprite.Sprite):
     def __init__(self, x, y, type):
@@ -290,7 +253,6 @@ class PowerUp(pygame.sprite.Sprite):
             self.image = pygame.image.load("img/powerup_heal.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
-
     def update(self):
         self.rect.y += 2
         if self.rect.top > screen_height:
@@ -302,7 +264,6 @@ class PowerUp(pygame.sprite.Sprite):
             elif self.type == "heal":
                 spaceship.health_remaining = min(spaceship.health_start, spaceship.health_remaining + 1)
             self.kill()
-
 # Cream grupuri pentru sprite-uri
 spaceship_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
@@ -310,7 +271,6 @@ alien_group = pygame.sprite.Group()
 alien_bullet_group = pygame.sprite.Group()
 explosion_group = pygame.sprite.Group()
 powerup_group = pygame.sprite.Group()
-
 # Functie care creeaza extraterestri
 def create_aliens():
     initial_y = 100 + (level - 1) * 50
@@ -318,7 +278,6 @@ def create_aliens():
         for item in range(cols):
             alien = Aliens(100 + item * 100, initial_y + row * 70)
             alien_group.add(alien)
-
 # Resetarea jocului
 def reset_game():
     global spaceship, countdown, last_count, game_over, score, level, alien_cooldown
@@ -338,12 +297,10 @@ def reset_game():
     level = 1
     alien_cooldown = 1000 if selected_difficulty == 0 else 750 if selected_difficulty == 1 else 500
     pygame.mixer.music.stop()  # Oprește muzica la începerea jocului
-
 # Cream jucatorul
 spaceship = Spaceship(int(screen_width / 2), screen_height - 100, 3, ship_images[selected_ship])
 spaceship_group.add(spaceship)
 create_aliens()
-
 # Loop-ul jocului
 run = True
 last_powerup_spawn = pygame.time.get_ticks()
@@ -351,7 +308,6 @@ music_started = False  # Urmareste daca muzica a inceput in meniu
 while run:
     clock.tick(fps)
     draw_bg()
-
     if in_main_menu:
         # Incepe muzica
         if not music_started:
@@ -362,7 +318,6 @@ while run:
             if current_led_state != "menu":
                 led_menu()
                 current_led_state = "menu"
-
         draw_main_menu()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -404,7 +359,6 @@ while run:
             powerup = PowerUp(random.randint(50, screen_width - 50), 0, power_type)
             powerup_group.add(powerup)
             last_powerup_spawn = pygame.time.get_ticks()
-
         if countdown == 0:
             time_now = pygame.time.get_ticks()
             if time_now - last_alien_shot > alien_cooldown and len(alien_group) > 0:
@@ -476,16 +430,13 @@ while run:
             elif countdown == 1:
                 draw_text('La lupta!', font40, white, int(screen_width / 2 - 80), int(screen_height / 2 + 50))
             draw_text(str(countdown), font40, white, int(screen_width / 2 - 10), int(screen_height / 2 + 100))
-
             count_timer = pygame.time.get_ticks()
             if count_timer - last_count > 1000:
                 countdown -= 1
                 last_count = count_timer
-
         draw_text(f"Score: {score}", font30, white, screen_width - 180, 10)
         draw_text(f"HighScore: {high_scores[selected_difficulty]}", font30, white, 10, 10)
         draw_text(f"Level: {level}", font30, white, screen_width // 2 - 50, 10)
-
         explosion_group.update()
         spaceship_group.draw(screen)
         bullet_group.draw(screen)
@@ -513,9 +464,7 @@ while run:
                 if (game_over == -1 or game_over == 1) and event.key == pygame.K_RETURN:
                     in_main_menu = True
 
-
     pygame.display.update()
-
 led_close()
 arduino.close()
 pygame.quit()
