@@ -44,6 +44,9 @@ Arduino Circuit
 You can view the complete wiring and Arduino setup using Tinkercad:
 🔗 [https://www.tinkercad.com/things/hXAUeezIRJF-rgb-connection](https://www.tinkercad.com/things/hXAUeezIRJF-rgb-connection)
 
+![image](https://github.com/user-attachments/assets/d1918112-5569-448e-9de1-208691c9772b)
+
+
 How It Works
 The game sends signals over the serial port based on its current state.
 
