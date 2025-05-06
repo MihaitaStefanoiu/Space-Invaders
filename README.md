@@ -60,9 +60,4 @@ Ensure your Arduino board is connected and upload the appropriate sketch (provid
 
 2. Run the Game
 Ensure the correct serial port is selected in your Python code (e.g., COM5 for Windows or /dev/ttyUSB0 for Linux/macOS).
-Then run the game:
-
-bash
-Copy
-Edit
-python game.py
+Then run the game
