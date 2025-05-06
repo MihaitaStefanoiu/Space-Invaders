@@ -42,7 +42,7 @@ Breadboard
 
 Arduino Circuit
 You can view the complete wiring and Arduino setup using Tinkercad:
-🔗 Tinkercad Circuit
+🔗 [https://www.tinkercad.com/things/hXAUeezIRJF-rgb-connection](https://www.tinkercad.com/things/hXAUeezIRJF-rgb-connection)
 
 How It Works
 The game sends signals over the serial port based on its current state.
