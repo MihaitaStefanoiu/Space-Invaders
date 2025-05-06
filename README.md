@@ -17,18 +17,13 @@ Game Over: Red
 
 Requirements
 Python-side:
-Python 3.x
-
+Python 3.13.2
 Pygame
-
 PySerial
 
 To install dependencies:
-
-bash
-Copy
-Edit
-pip install pygame pyserial
+pip install pygame
+pip install pyserial
 Arduino-side:
 Arduino UNO or compatible board
 
